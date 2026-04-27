@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(cmake ..)",
+      "Bash(cmake --build .)",
+      "Bash(rm -rf \"C:/Users/daclo/Downloads/cpp-webview-gui-main/cpp-webview-gui-main/build\")",
+      "Bash(mkdir -p \"C:/Users/daclo/Downloads/cpp-webview-gui-main/cpp-webview-gui-main/build\")",
+      "Bash(cmake --build . --clean-first)",
+      "Bash(dir /s /b \"_deps\\\\*Token.hpp\")",
+      "Bash(dir /s /b \"_deps\\\\*token.hpp\")",
+      "Bash(cmake --build . --verbose)",
+      "Bash(cmake --build . --config Release)",
+      "Bash(cmake --build . --clean-first --config Release)",
+      "Bash(cmake .. -DCMAKE_BUILD_TYPE=Release)",
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(cmake --build build --config Release --clean-first)",
+      "Bash(cmake --build /c/Users/daclo/Downloads/cpp-webview-gui-main/cpp-webview-gui-main/build --config Release)",
+      "Bash(taskkill /f /im app.exe)",
+      "Bash(python -c \"from PIL import Image; print\\('Pillow OK'\\)\")"
+    ]
+  }
+}

@@ -1,12 +1,16 @@
 import './style.css';
+import { setupUI } from './js/ui.js';
+import { setupKeyboard } from './js/keyboard.js';
+import { loadHistory } from './js/history.js';
+import { updateMemoryIndicator, updateDisplay, updateAngleButton } from './js/ui.js';
 
 function main() {
-  const textField = document.querySelector("#text-field");
-  const sendBtn = document.querySelector("#send-btn");
-
-  sendBtn.addEventListener("click", () => {
-    window.ping(textField.value); 
-  });
+  loadHistory();
+  setupUI();
+  setupKeyboard();
+  updateDisplay();
+  updateMemoryIndicator();
+  updateAngleButton();
 }
 
 window.addEventListener('DOMContentLoaded', main);

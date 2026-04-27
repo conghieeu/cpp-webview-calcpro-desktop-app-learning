@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(app LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(MSVC)
+    add_compile_options(/std:c++17 /Zc:__cplusplus)
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
@@ -25,6 +32,16 @@ FetchContent_MakeAvailable(json)
 
 add_executable(app WIN32)
 
-target_sources(app PRIVATE src/main.cpp ui/dist/index_html.h)
-target_include_directories(app PRIVATE ui/dist)
+target_sources(app PRIVATE
+    src/main.cpp
+    src/engine/Calculator.cpp
+    src/engine/Parser.cpp
+    src/engine/MathFunctions.cpp
+    src/bridge/Bridge.cpp
+    ui/dist/index_html.h
+)
+target_include_directories(app PRIVATE
+    ui/dist
+    src
+)
 target_link_libraries(app PRIVATE webview::core nlohmann_json::nlohmann_json)

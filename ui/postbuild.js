@@ -15,37 +15,38 @@ if (!fs.existsSync(inputPath)) {
   process.exit(1);
 }
 
-// Read HTML
 let html = fs.readFileSync(inputPath, "utf-8");
 
-// Remove whitespace
+// Minify
 html = html
-  .replace(/\s+/g, " ") // collapse consecutive whitespace
-  .replace(/>\s+</g, "><") // remove space between tags
+  .replace(/\s+/g, " ")
+  .replace(/>\s+</g, "><")
   .trim();
 
-// Escape backslashes and double quotes
-html = html
-  .replace(/\\/g, "\\\\")
-  .replace(/"/g, '\\"')
-  .replace(/\n/g, '\\n"\n"');
+// Use a C++ raw string literal with unique delimiter.
+// Split into chunks to stay under MSVC's ~16380-char string literal limit.
+const delim = "CALCPRO_RAW_END";
+const CHUNK_SIZE = 8000;
 
-// Build header content
 let header = `#pragma once
 // Auto-generated from ${path.basename(inputPath)}
 // Do not edit manually.
 
-constexpr const char INDEX_HTML[] =`;
+static const char* INDEX_HTML =`;
 
-let htmlParts = [];
-for (let i = 0; i < html.length; i += 300) {
-  let part = `"${html.slice(i, i + 300)}"`;
-  htmlParts.push(part);
+let remaining = html;
+let parts = [];
+
+while (remaining.length > 0) {
+  // Take a chunk of up to CHUNK_SIZE bytes
+  let chunk = remaining.slice(0, CHUNK_SIZE);
+  // Check if the rest of the string starts with a char that could end our raw delimiter
+  // (just being safe - any chunk ending mid-character could be problematic)
+  remaining = remaining.slice(CHUNK_SIZE);
+  parts.push(`R"${delim}(${chunk})${delim}"`);
 }
 
-let quotedHtml = htmlParts.join("\n");
-
-header = header.concat(`${quotedHtml};`);
+header += parts.join("\n") + ";\n";
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, header);
